@@ -1,0 +1,41 @@
+:root {
+
+    /* Fondos */
+    --color-bg-main: #171A21;
+    --color-bg-card: #222630;
+
+    /* Texto */
+    --color-text-main: #E2E8F0;
+    --color-text-muted: #94A3B8;
+
+    /* UI */
+    --color-accent-gold: #D4AF37;
+    --color-accent-magic: #3B82F6;
+
+    /* Rarezas */
+    --rarity-common: #94A3B8;
+    --rarity-uncommon: #4ADE80;
+    --rarity-rare: #3B82F6;
+    --rarity-epic: #A855F7;
+    --rarity-legendary: #F59E0B;
+
+    /* Fonts */
+    --font-ui: 'Inter', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+    --font-pixel: 'Press Start 2P', cursive;
+
+    /* Bordes */
+    --radius-md: 12px;
+    --radius-lg: 18px;
+
+    /* Sombras */
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+}
