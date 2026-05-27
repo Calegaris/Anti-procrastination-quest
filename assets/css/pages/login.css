@@ -1,0 +1,334 @@
+/* ============================================================
+   ANTI-PROCRASTINATION QUEST: LOGIN / SETUP STYLES
+   ============================================================ */
+
+/* Main Page Layout Wrapper */
+.login-page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: radial-gradient(circle at top, #1e2230 0%, #11131a 100%);
+    overflow-x: hidden;
+}
+
+/* Glassmorphic Quest Board Container */
+.login-card {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(34, 38, 48, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Retro-Fantasy Header */
+.login-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.login-title {
+    font-family: var(--font-pixel);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--color-accent-gold);
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
+                 0 0 12px rgba(212, 175, 55, 0.3);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 1px;
+    animation: floatingTitle 3s ease-in-out infinite;
+}
+
+.login-subtitle {
+    font-family: var(--font-ui);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+/* Input Fields Container */
+.form-group {
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.form-label {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--color-accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-field {
+    width: 100%;
+    background: rgba(23, 26, 33, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    color: var(--color-text-main);
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--color-accent-gold);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+    background: rgba(23, 26, 33, 0.95);
+}
+
+/* Character Counter (Mono font) */
+.char-counter {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+}
+
+.char-counter.invalid {
+    color: #ef4444;
+}
+
+/* Validation Feedback Alert */
+.error-feedback {
+    font-size: 0.75rem;
+    color: #f87171;
+    min-height: 16px;
+    margin-top: 2px;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+.error-feedback.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Class Selection Grid */
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Class Card styling */
+.class-card {
+    background: rgba(23, 26, 33, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    min-height: 110px;
+    user-select: none;
+}
+
+.class-card:not(.locked):hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Class Icons */
+.class-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.class-card:not(.locked):hover .class-icon {
+    transform: scale(1.15);
+}
+
+.class-name {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-main);
+    text-align: center;
+}
+
+.class-desc {
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--spacing-xs);
+    display: none; /* simple design placeholder, keeping cards concise */
+}
+
+/* Warrior Specific Selection Glow */
+.class-card[data-class="warrior"].selected {
+    border-color: var(--color-accent-gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.3),
+                inset 0 0 8px rgba(212, 175, 55, 0.1);
+}
+
+.class-card[data-class="warrior"].selected .class-name {
+    color: var(--color-accent-gold);
+}
+
+/* Mage Specific Selection Glow */
+.class-card[data-class="mage"].selected {
+    border-color: var(--color-accent-magic);
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.3),
+                inset 0 0 8px rgba(59, 130, 246, 0.1);
+}
+
+.class-card[data-class="mage"].selected .class-name {
+    color: var(--color-accent-magic);
+}
+
+/* Locked Card Style (Coming soon) */
+.class-card.locked {
+    opacity: 0.45;
+    background: rgba(23, 26, 33, 0.3);
+    border: 2px dashed rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
+}
+
+.class-card.locked .class-icon {
+    filter: grayscale(1);
+}
+
+.coming-soon-badge {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--color-text-muted);
+    font-size: 0.55rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}
+
+/* Adventure Submit Button */
+.btn-submit-wrapper {
+    margin-top: var(--spacing-xl);
+}
+
+.btn-adventure {
+    width: 100%;
+    font-family: var(--font-pixel);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 18px 24px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-adventure:not(.disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+    background: linear-gradient(135deg, #4f46e5 0%, #c084fc 100%);
+}
+
+.btn-adventure:not(.disabled):active {
+    transform: translateY(1px);
+}
+
+/* Pulsing effect when fully active and ready */
+.btn-adventure:not(.disabled) {
+    animation: actionPulse 2s infinite ease-in-out;
+}
+
+/* Disabled State Styling */
+.btn-adventure.disabled,
+.btn-adventure:disabled {
+    background: rgba(34, 38, 48, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--color-text-muted) !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    animation: none !important;
+    opacity: 0.6;
+}
+
+/* Animations */
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatingTitle {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes actionPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(168, 85, 247, 0.6);
+    }
+}
+
+/* Responsive adjustment */
+@media (max-width: 480px) {
+    .login-card {
+        padding: var(--spacing-lg);
+    }
+    .class-grid {
+        gap: 6px;
+    }
+    .class-card {
+        min-height: 95px;
+    }
+    .class-icon {
+        font-size: 1.7rem;
+    }
+    .login-title {
+        font-size: 0.95rem;
+    }
+}
