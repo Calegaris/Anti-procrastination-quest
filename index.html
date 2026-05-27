@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Anti Procrastination Quest</title>
+    <title>Anti Procrastination Quest - Inicio</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,15 +19,80 @@
     <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages/login.css">
 </head>
 
 <body>
 
     <main class="app-container">
+        <div class="login-page-wrapper">
+            <div class="login-card">
+                <header class="login-header">
+                    <h1 class="login-title">ANTI-PROCRASTINATION<br>QUEST</h1>
+                    <p class="login-subtitle">Comienza tu aventura contra la procrastinación</p>
+                </header>
 
-        <!-- contenido -->
+                <form id="login-form" novalidate>
+                    <!-- Input Nombre -->
+                    <div class="form-group">
+                        <label for="player-name" class="form-label">
+                            Nombre del Héroe
+                            <span id="char-counter" class="char-counter">0/30</span>
+                        </label>
+                        <div class="input-container">
+                            <input 
+                                type="text" 
+                                id="player-name" 
+                                class="input-field" 
+                                placeholder="Escribe tu nombre..." 
+                                maxlength="30"
+                                required
+                                autocomplete="off"
+                            />
+                        </div>
+                        <span id="error-message" class="error-feedback"></span>
+                    </div>
 
+                    <!-- Selección de Clase -->
+                    <div class="form-group">
+                        <label class="form-label">Selecciona tu Clase</label>
+                        <div class="class-grid">
+                            <!-- Guerrero -->
+                            <div class="class-card" data-class="warrior">
+                                <span class="class-icon">⚔️</span>
+                                <span class="class-name">Guerrero</span>
+                            </div>
+
+                            <!-- Mago -->
+                            <div class="class-card" data-class="mage">
+                                <span class="class-icon">🔮</span>
+                                <span class="class-name">Mago</span>
+                            </div>
+
+                            <!-- Rogue (Locked) -->
+                            <div class="class-card locked" title="Próximamente">
+                                <span class="class-icon">🗡️</span>
+                                <span class="class-name">Pícaro</span>
+                                <span class="coming-soon-badge">Soon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón para Jugar -->
+                    <div class="btn-submit-wrapper">
+                        <button type="submit" id="btn-submit" class="btn-adventure disabled" disabled>
+                            EMPEZAR AVENTURA
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
+
+    <!-- Scripts -->
+    <script src="assets/js/storage.js" defer></script>
+    <script src="assets/js/ui.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
 
 </body>
 
