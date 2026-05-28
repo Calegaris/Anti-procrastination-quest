@@ -1,0 +1,71 @@
+/* Dashboard page styles for the Character Banner */
+.character-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.character-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+}
+
+.character-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.character-name {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+}
+
+.character-level-title {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: baseline;
+}
+
+.character-level {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent-gold);
+}
+
+.character-title {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+    .character-banner {
+        padding: var(--spacing-lg);
+    }
+
+    .character-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .character-name {
+        font-size: 1.15rem;
+    }
+
+    .character-level,
+    .character-title {
+        font-size: 0.95rem;
+    }
+}
