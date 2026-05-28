@@ -18,20 +18,45 @@
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/layout.css">
     <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/pages/dashboard.css">
 </head>
 
 <body>
 
     <main class="app-container">
 
+        <section class="character-banner" role="region" aria-label="Banner del personaje" id="character-banner">
+            <img id="avatar-img" class="character-avatar" src="" alt="Avatar del jugador" width="72" height="72">
+            <div class="character-info">
+                <div class="character-name" id="character-name">Invitado</div>
+                <div class="character-level-title">
+                    <span class="character-level" id="character-level">Nivel 1</span>
+                    <span class="character-title" id="character-title">Novato Persistente</span>
+                </div>
+            </div>
+        </section>
+
         <!-- contenido -->
 
     </main>
 
+    <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
-        ...
+        <a href="dashboard.html" class="nav-item active" id="nav-dashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="missions.html" class="nav-item" id="nav-missions">
+            <span class="nav-icon">⚔️</span>
+            <span>Misiones</span>
+        </a>
+        <a href="profile.html" class="nav-item" id="nav-profile">
+            <span class="nav-icon">👤</span>
+            <span>Perfil</span>
+        </a>
     </nav>
 
+    <script src="../assets/js/character-banner.js"></script>
 </body>
 
 </html>
