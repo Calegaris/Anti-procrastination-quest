@@ -4,7 +4,8 @@
  */
 
 const STORAGE_KEYS = {
-    USER: 'apq_user'
+    USER: 'apq_user',
+    MISSIONS: 'apq_missions'
 };
 
 const Storage = {
@@ -56,6 +57,60 @@ const Storage = {
         } catch (error) {
             console.error('Error clearing user data from localStorage:', error);
         }
+    },
+
+    /**
+     * Retrieves the missions list from localStorage.
+     * @returns {Array} An array of mission objects.
+     */
+    getMissions() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEYS.MISSIONS);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            console.error('Error reading missions from localStorage:', error);
+            return [];
+        }
+    },
+
+    /**
+     * Saves the missions array to localStorage.
+     * @param {Array} missions - The list of missions to save.
+     */
+    saveMissions(missions) {
+        try {
+            localStorage.setItem(STORAGE_KEYS.MISSIONS, JSON.stringify(missions));
+        } catch (error) {
+            console.error('Error saving missions to localStorage:', error);
+        }
+    },
+
+    /**
+     * Adds a single mission to the localStorage collection.
+     * @param {Object} mission - The mission object to add.
+     */
+    addMission(mission) {
+        try {
+            const missions = this.getMissions();
+            missions.push(mission);
+            this.saveMissions(missions);
+            return true;
+        } catch (error) {
+            console.error('Error adding mission to localStorage:', error);
+            return false;
+        }
+    },
+
+    /**
+     * Checks if a mission name is unique in the saved list (case-insensitive).
+     * @param {string} name - The mission name to check.
+     * @returns {boolean} True if the name is unique, false otherwise.
+     */
+    isMissionNameUnique(name) {
+        if (!name) return false;
+        const missions = this.getMissions();
+        const normalizedInput = name.trim().toLowerCase();
+        return !missions.some(m => m.name && m.name.trim().toLowerCase() === normalizedInput);
     }
 };
 
