@@ -482,23 +482,29 @@ const UI = {
     /**
      * Shows a beautiful temporary visual success notification when a mission is created.
      * @param {string} message - The message to show.
+     * @returns {Promise} Resolves when the toast has completed its entire exit transition.
      */
     showToast(message) {
-        // Remove existing toast if any
-        const existingToast = document.querySelector('.quest-toast');
-        if (existingToast) existingToast.remove();
+        return new Promise((resolve) => {
+            // Remove existing toast if any
+            const existingToast = document.querySelector('.quest-toast');
+            if (existingToast) existingToast.remove();
 
-        const toast = document.createElement('div');
-        toast.className = 'quest-toast';
-        toast.innerHTML = `<span class="toast-icon">✨</span> <span class="toast-message">${message}</span>`;
-        document.body.appendChild(toast);
+            const toast = document.createElement('div');
+            toast.className = 'quest-toast';
+            toast.innerHTML = `<span class="toast-icon">✨</span> <span class="toast-message">${message}</span>`;
+            document.body.appendChild(toast);
 
-        // Animate in and out
-        setTimeout(() => toast.classList.add('visible'), 50);
-        setTimeout(() => {
-            toast.classList.remove('visible');
-            setTimeout(() => toast.remove(), 400);
-        }, 3000);
+            // Animate in and out
+            setTimeout(() => toast.classList.add('visible'), 50);
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => {
+                    toast.remove();
+                    resolve();
+                }, 400);
+            }, 3000);
+        });
     },
 
     /**
@@ -557,9 +563,14 @@ const UI = {
                     <p class="mission-card-desc">${escapeHTML(mission.description)}</p>
                     <div class="mission-card-footer">
                         <span class="mission-card-meta">⏱️ ${cooldownText}</span>
-                        <div class="mission-card-reward">
-                            <span class="exp-icon">💎</span>
-                            <span class="exp-value">+${mission.exp} XP</span>
+                        <div class="mission-card-actions">
+                            <button type="button" class="btn-complete-mission" data-id="${mission.id}">
+                                ⚔️ Completar
+                            </button>
+                            <div class="mission-card-reward">
+                                <span class="exp-icon">💎</span>
+                                <span class="exp-value">+${mission.exp} XP</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -41,12 +41,18 @@
         const source = raw.usuario && typeof raw.usuario === 'object' ? raw.usuario : raw;
         const name = extractString(source.name || source.nombre || source.displayName || source.nombreUsuario || 'Héroe');
         const cls = extractString(source.class || source.clase || '').toLowerCase();
-        const level = clampNumber(source.level || source.nivel || 1, 1, 10);
+        
+        // Ensure both Spanish and English keys are normalized at retrieval boundary
+        const level = clampNumber(source.nivel ?? source.level ?? 1, 1, 10);
+        const experience = parseInt(source.experiencia ?? source.experience ?? source.exp ?? 0, 10);
 
         return {
             name: name || 'Héroe',
             class: cls || 'warrior',
-            level
+            level,
+            nivel: level,
+            experience,
+            experiencia: experience
         };
     }
 
@@ -119,8 +125,51 @@
         return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
     }
 
-    function renderBanner() {
-        const user = getUserFromStorage();
+    function getExpRequired(level) {
+        const table = {
+            1: 100,
+            2: 250,
+            3: 400,
+            4: 600,
+            5: 900,
+            6: 1200,
+            7: 1600,
+            8: 2000,
+            9: 2500
+        };
+        const lvl = parseInt(level, 10) || 1;
+        return table[lvl] || 0;
+    }
+
+    function calculateExpPercentage(user) {
+        if (!user) {
+            return { current: 0, required: 100, percentage: 0 };
+        }
+        const lvl = parseInt(user.nivel ?? user.level ?? 1, 10);
+        const current = parseInt(user.experiencia ?? user.experience ?? 0, 10);
+
+        if (lvl >= 10) {
+            return { current: 0, required: 0, percentage: 100 };
+        }
+
+        const required = getExpRequired(lvl);
+        const percentage = required > 0 ? (current / required) * 100 : 0;
+
+        return {
+            current,
+            required,
+            percentage: Math.min(percentage, 100)
+        };
+    }
+
+    function renderBanner(passedUser) {
+        let user = passedUser || getUserFromStorage();
+
+        // Normalize passedUser if it comes directly from external triggers
+        if (user && (user.nivel === undefined || user.experiencia === undefined)) {
+            user = normalizeUser(user);
+        }
+
         const banner = document.getElementById('character-banner');
         const avatar = document.getElementById('avatar-img');
         const nameEl = document.getElementById('character-name');
@@ -163,6 +212,44 @@
             const initials = getInitials(user.name);
             avatar.src = makeFallbackImage(initials || '?');
         };
+
+        // XP Bar rendering (HU-05) - supporting both ID and Class lookups
+        const xpContainer = document.querySelector('.exp-bar') || document.querySelector('.xp-container') || document.getElementById('xp-container');
+        const xpBarFill = document.querySelector('.exp-bar-fill') || document.getElementById('xp-bar-fill');
+        const xpText = document.querySelector('.exp-bar-text') || document.getElementById('xp-text');
+
+        if (xpContainer) {
+            const xpBarTrack = document.querySelector('.xp-bar-track') || document.getElementById('xp-bar-track');
+            
+            // 1. Get correct current and required EXP values using user.experiencia ?? user.experience ?? 0
+            const currentExp = user.experiencia ?? user.experience ?? 0;
+            const requiredExp = getExpRequired(user.nivel);
+
+            if (parseInt(user.nivel, 10) >= 10) {
+                if (xpBarTrack) {
+                    xpBarTrack.style.display = 'none';
+                }
+                if (xpText) {
+                    xpText.textContent = 'MAX LEVEL';
+                    xpText.className = 'xp-text exp-bar-text max-level-text';
+                }
+            } else {
+                if (xpBarTrack) {
+                    xpBarTrack.style.display = 'block';
+                }
+                // 2. Bar fill width matches percentage from calculateExpPercentage(user)
+                const xpInfo = calculateExpPercentage(user);
+                
+                if (xpBarFill) {
+                    xpBarFill.style.width = `${xpInfo.percentage}%`;
+                }
+                if (xpText) {
+                    // 3. Display text: “currentExp / requiredExp EXP”
+                    xpText.textContent = `${currentExp} / ${requiredExp} EXP`;
+                    xpText.className = 'xp-text exp-bar-text';
+                }
+            }
+        }
     }
 
     function getInitials(name) {
@@ -174,6 +261,11 @@
             .join('');
     }
 
-    document.addEventListener('DOMContentLoaded', renderBanner);
+    // Expose renderExpBar globally to ensure dynamic, real-time refreshes
+    window.renderExpBar = function (user) {
+        renderBanner(user);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => { renderBanner(); });
     window.CharacterBanner = { render: renderBanner };
 })();
