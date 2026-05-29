@@ -241,6 +241,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 4.5 Bind click listener to missions list for mission completion (HU-05)
+    const missionsListContainer = elements.missionsListContainer;
+    if (missionsListContainer) {
+        missionsListContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-complete-mission');
+            if (!btn) return;
+
+            e.stopPropagation();
+            const missionId = btn.dataset.id;
+            
+            if (window.Storage && window.Progression && window.UI) {
+                const user = window.Storage.getUser();
+                const missions = window.Storage.getMissions();
+                const mission = missions.find(m => m.id === missionId);
+
+                if (!user || !mission) return;
+
+                // 1. Calculate and apply class bonus EXP
+                const baseExp = mission.exp || 0;
+                const finalExp = window.Progression.applyClassBonus(baseExp, user.class);
+
+                // 2. Perform the experience addition and level up check
+                const result = window.Progression.addExperience(finalExp);
+
+                // 3. Remove the completed mission from active missions list
+                const updatedMissions = missions.filter(m => m.id !== missionId);
+                window.Storage.saveMissions(updatedMissions);
+
+                // 3.5. Trigger the bar update immediately after saving the user object to localStorage (HU-05)
+                const updatedUser = window.Storage.getUser();
+                if (typeof window.renderExpBar === 'function') {
+                    window.renderExpBar(updatedUser);
+                }
+
+                // 4. Show success toast notifications sequentially (HU-05)
+                window.UI.showToast(`¡Misión completada! Has ganado +${finalExp} EXP.`).then(() => {
+                    if (result && result.leveledUp) {
+                        window.UI.showToast(`🎉 ¡SUBISTE DE NIVEL! Ahora eres Nivel ${result.newLevel} (${result.newTitle})`);
+                    }
+                });
+
+                // 5. Instantly sync the list view
+                syncMissionsList();
+            }
+        });
+    }
+
     /**
      * Instantly grabs saved missions from Storage and renders them on the board.
      */
