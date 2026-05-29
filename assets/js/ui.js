@@ -42,30 +42,194 @@ const UI = {
         this.elements.loginForm = document.getElementById('login-form');
         this.elements.nameInput = document.getElementById('player-name');
         this.elements.charCounter = document.getElementById('char-counter');
-        this.elements.classCards = document.querySelectorAll('.class-card:not(.locked)');
+        this.elements.classGrid = document.getElementById('class-grid');
         this.elements.submitButton = document.getElementById('btn-submit');
         this.elements.errorMessage = document.getElementById('error-message');
+
+        // Evolution details modal cache
+        this.elements.classModal = document.getElementById('class-details-modal');
+        this.elements.modalCloseBtn = document.getElementById('modal-close-btn');
+        this.elements.modalClassIcon = document.getElementById('modal-class-icon');
+        this.elements.modalClassTitle = document.getElementById('modal-class-title');
+        this.elements.modalEvolutionChain = document.getElementById('modal-evolution-chain');
+        this.elements.modalBonusDesc = document.getElementById('modal-bonus-description');
+        this.elements.modalConfirmBtn = document.getElementById('btn-select-class');
     },
 
     /**
-     * Set up class card visual selection behavior.
-     * @param {Function} onClassChange - Callback when a class card is chosen.
+     * Renders the dynamic class selection cards inside the grid.
+     * @param {Array} classesData - Array of class configuration objects.
+     * @param {string} selectedClassId - The currently selected class ID.
      */
-    setupClassSelection(onClassChange) {
-        this.elements.classCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Clear selection on other cards
-                this.elements.classCards.forEach(c => c.classList.remove('selected'));
-                
-                // Mark current card as selected
-                card.classList.add('selected');
-                
-                // Execute callback if provided
-                if (typeof onClassChange === 'function') {
-                    onClassChange(card.dataset.class);
-                }
-            });
+    renderClassCards(classesData, selectedClassId) {
+        const grid = this.elements.classGrid;
+        if (!grid) return;
+
+        grid.innerHTML = classesData.map(cls => {
+            const isSelected = cls.id === selectedClassId ? 'selected' : '';
+            if (cls.locked) {
+                return `
+                    <div class="class-card locked" title="Próximamente">
+                        <span class="class-icon">${cls.icon}</span>
+                        <span class="class-name">${cls.name}</span>
+                        <span class="coming-soon-badge">Soon</span>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="class-card ${isSelected}" data-class="${cls.id}">
+                        <div class="class-card-sprite-wrapper">
+                            <img class="class-card-sprite" src="${cls.sprite}" alt="${cls.name} sprite">
+                        </div>
+                        <span class="class-name">${cls.name}</span>
+                        <span class="class-card-bonus">${cls.shortBonus}</span>
+                    </div>
+                `;
+            }
+        }).join('');
+    },
+
+    /**
+     * Set up dynamic class card selection behavior using event delegation.
+     * @param {Function} onClassClick - Callback executed when an active class card is clicked.
+     */
+    setupClassSelection(onClassClick) {
+        const grid = this.elements.classGrid;
+        if (!grid) return;
+
+        grid.addEventListener('click', (e) => {
+            // Check if clicking class sprite specifically to trigger lightbox zoom
+            const sprite = e.target.closest('.class-card-sprite');
+            if (sprite) {
+                e.stopPropagation();
+                const card = sprite.closest('.class-card');
+                const className = card.querySelector('.class-name').textContent;
+                this.showImageLightbox(sprite.src, `${className} - Nivel 1`);
+                return;
+            }
+
+            const card = e.target.closest('.class-card:not(.locked)');
+            if (!card) return;
+
+            const chosenClass = card.dataset.class;
+            if (typeof onClassClick === 'function') {
+                onClassClick(chosenClass);
+            }
         });
+    },
+
+    /**
+     * Highlights the selected class card visually in the grid.
+     * @param {string} selectedClassId - The class ID to highlight.
+     */
+    highlightClassCard(selectedClassId) {
+        const grid = this.elements.classGrid;
+        if (!grid) return;
+
+        const cards = grid.querySelectorAll('.class-card:not(.locked)');
+        cards.forEach(card => {
+            if (card.dataset.class === selectedClassId) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+    },
+
+    /**
+     * Opens the class details & evolution showcase modal.
+     * @param {Object} classData - The active class metadata to present.
+     * @param {Function} onConfirm - Callback executed when confirming selection inside modal.
+     */
+    openClassModal(classData, onConfirm) {
+        const modal = this.elements.classModal;
+        if (!modal) return;
+
+        // Apply theme/context class for glowing color variations
+        modal.dataset.class = classData.id;
+
+        // Header info
+        if (this.elements.modalClassIcon) this.elements.modalClassIcon.textContent = classData.icon;
+        if (this.elements.modalClassTitle) this.elements.modalClassTitle.textContent = classData.name;
+
+        // Evolution chain HTML builder
+        if (this.elements.modalEvolutionChain) {
+            const levelTitles = ['Novato', 'Veterano', 'Campeón', 'Maestro'];
+            this.elements.modalEvolutionChain.innerHTML = classData.sprites.map((spritePath, idx) => {
+                const isLast = idx === classData.sprites.length - 1;
+                const arrowHtml = isLast ? '' : `<div class="evolution-arrow">➜</div>`;
+                
+                return `
+                    <div class="evolution-item">
+                        <div class="evolution-sprite-frame">
+                            <img class="evolution-sprite" src="${spritePath}" alt="${classData.name} Nivel ${idx + 1}">
+                        </div>
+                        <span class="evolution-label">Nivel ${idx + 1}</span>
+                        <span class="evolution-level-name">${levelTitles[idx]}</span>
+                    </div>
+                    ${arrowHtml}
+                `;
+            }).join('');
+
+            // Click listener for lightbox image zoom on evolution sprites
+            this.elements.modalEvolutionChain.onclick = (e) => {
+                const sprite = e.target.closest('.evolution-sprite');
+                if (sprite) {
+                    const evoItem = sprite.closest('.evolution-item');
+                    const label = evoItem.querySelector('.evolution-label').textContent;
+                    const levelName = evoItem.querySelector('.evolution-level-name').textContent;
+                    this.showImageLightbox(sprite.src, `${classData.name} - ${label} (${levelName})`);
+                }
+            };
+        }
+
+        // Extended bonus text description
+        if (this.elements.modalBonusDesc) {
+            this.elements.modalBonusDesc.textContent = classData.longBonus;
+        }
+
+        // Action button binding with clean event-listener refresh
+        const confirmBtn = this.elements.modalConfirmBtn;
+        if (confirmBtn) {
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            this.elements.modalConfirmBtn = newConfirmBtn;
+
+            newConfirmBtn.addEventListener('click', () => {
+                if (typeof onConfirm === 'function') {
+                    onConfirm(classData.id);
+                }
+                this.closeClassModal();
+            });
+        }
+
+        // Open animation trigger
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+
+        // Setup closing hooks
+        const closeBtn = this.elements.modalCloseBtn;
+        if (closeBtn) {
+            closeBtn.onclick = () => this.closeClassModal();
+        }
+
+        // Overlay backdrop click dismiss hook
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                this.closeClassModal();
+            }
+        };
+    },
+
+    /**
+     * Closes the evolution showcase modal.
+     */
+    closeClassModal() {
+        const modal = this.elements.classModal;
+        if (!modal) return;
+
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
     },
 
     /**
@@ -401,6 +565,62 @@ const UI = {
                 </div>
             `;
         }).join('');
+    },
+
+    /**
+     * Creates and displays a reusable, retro-themed Lightbox modal for image zooming.
+     * @param {string} imageSrc - The source path of the image to display.
+     * @param {string} captionText - The text title/caption for the zoomed image.
+     */
+    showImageLightbox(imageSrc, captionText) {
+        // Prevent duplicate overlays
+        const existingOverlay = document.querySelector('.lightbox-overlay');
+        if (existingOverlay) existingOverlay.remove();
+
+        // 1. Create overlay wrapper
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-label', `Zoom de imagen: ${captionText}`);
+
+        // 2. Create card content
+        overlay.innerHTML = `
+            <div class="lightbox-card">
+                <button type="button" class="lightbox-close" aria-label="Cerrar">&times;</button>
+                <div class="lightbox-img-wrapper">
+                    <img class="lightbox-img" src="${imageSrc}" alt="${captionText}">
+                </div>
+                <div class="lightbox-caption">${captionText}</div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        document.body.classList.add('lightbox-lock');
+
+        // Trigger active class for entrance transition
+        setTimeout(() => overlay.classList.add('active'), 50);
+
+        // Helper to close modal
+        const closeLightbox = () => {
+            overlay.classList.remove('active');
+            document.body.classList.remove('lightbox-lock');
+            setTimeout(() => overlay.remove(), 300);
+            document.removeEventListener('keydown', handleEsc);
+        };
+
+        // Close on escape key
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        };
+        document.addEventListener('keydown', handleEsc);
+
+        // Close on X click
+        overlay.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+
+        // Close on background overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeLightbox();
+        });
     }
 };
 
