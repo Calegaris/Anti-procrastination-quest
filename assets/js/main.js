@@ -18,6 +18,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Class selection data containing icons, titles, bonuses, and evolution levels
+    const CLASSES_DATA = [
+        {
+            id: 'warrior',
+            name: 'Guerrero',
+            icon: '⚔️',
+            shortBonus: 'x1.25 XP (Lunes a Viernes)',
+            longBonus: 'Los Guerreros destacan por su consistencia y disciplina en la rutina semanal. Obtienen un multiplicador de 1.25x en toda la experiencia (XP) obtenida al completar misiones de Lunes a Viernes, ideal para impulsar tu productividad y progreso durante los días laborables.',
+            sprite: 'assets/avatares/guerrero/nivel_1.png',
+            sprites: [
+                'assets/avatares/guerrero/nivel_1.png',
+                'assets/avatares/guerrero/nivel_2.png',
+                'assets/avatares/guerrero/nivel_3.png',
+                'assets/avatares/guerrero/nivel_4.png'
+            ],
+            locked: false
+        },
+        {
+            id: 'mage',
+            name: 'Mago',
+            icon: '🔮',
+            shortBonus: 'x1.75 XP (Sábados y Domingos)',
+            longBonus: 'Los Magos canalizan sus flujos de energía y concentración en los fines de semana. Obtienen un espectacular multiplicador de 1.75x en toda la experiencia (XP) obtenida al completar misiones los Sábados y Domingos, ideal para dar grandes saltos de nivel en tus días de descanso.',
+            sprite: 'assets/avatares/mago/nivel_1.png',
+            sprites: [
+                'assets/avatares/mago/nivel_1.png',
+                'assets/avatares/mago/nivel_2.png',
+                'assets/avatares/mago/nivel_3.png',
+                'assets/avatares/mago/nivel_4.png'
+            ],
+            locked: false
+        },
+        {
+            id: 'rogue',
+            name: 'Pícaro',
+            icon: '🗡️',
+            shortBonus: 'Próximamente - Bonus de Velocidad',
+            longBonus: 'Los Pícaros se mueven con sigilo entre las sombras del tiempo. En futuras actualizaciones, su bonus de agilidad les permitirá evadir o reducir penalizaciones de experiencia por tareas que se venzan o queden pendientes.',
+            sprite: '',
+            sprites: [],
+            locked: true
+        }
+    ];
+
     // Local state to keep track of form selection
     let selectedClass = '';
 
@@ -42,10 +86,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return isFormValid;
     }
 
-    // 3. Setup Class selection behavior
-    window.UI.setupClassSelection((chosenClass) => {
-        selectedClass = chosenClass;
-        validateFormState();
+    // 3. Setup Class selection behavior with Evolution Modal trigger
+    window.UI.renderClassCards(CLASSES_DATA, selectedClass);
+    window.UI.setupClassSelection((chosenClassId) => {
+        const classData = CLASSES_DATA.find(cls => cls.id === chosenClassId);
+        if (classData && !classData.locked) {
+            window.UI.openClassModal(classData, (confirmedClassId) => {
+                selectedClass = confirmedClassId;
+                window.UI.highlightClassCard(confirmedClassId);
+                validateFormState();
+            });
+        }
     });
 
     // 4. Setup Input fields behavior

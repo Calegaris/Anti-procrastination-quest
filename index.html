@@ -56,25 +56,8 @@
                     <!-- Selección de Clase -->
                     <div class="form-group">
                         <label class="form-label">Selecciona tu Clase</label>
-                        <div class="class-grid">
-                            <!-- Guerrero -->
-                            <div class="class-card" data-class="warrior">
-                                <span class="class-icon">⚔️</span>
-                                <span class="class-name">Guerrero</span>
-                            </div>
-
-                            <!-- Mago -->
-                            <div class="class-card" data-class="mage">
-                                <span class="class-icon">🔮</span>
-                                <span class="class-name">Mago</span>
-                            </div>
-
-                            <!-- Rogue (Locked) -->
-                            <div class="class-card locked" title="Próximamente">
-                                <span class="class-icon">🗡️</span>
-                                <span class="class-name">Pícaro</span>
-                                <span class="coming-soon-badge">Soon</span>
-                            </div>
+                        <div class="class-grid" id="class-grid">
+                            <!-- Cards will be dynamically injected here via JS -->
                         </div>
                     </div>
 
@@ -88,6 +71,39 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal de Detalles de Clase (Evolution Showcase) -->
+    <div id="class-details-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-class-title">
+        <div class="modal-card">
+            <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar">&times;</button>
+            
+            <header class="modal-header">
+                <span class="modal-class-icon" id="modal-class-icon">⚔️</span>
+                <h2 class="modal-class-title" id="modal-class-title">Guerrero</h2>
+            </header>
+            
+            <div class="modal-body">
+                <!-- Evolution path showcase -->
+                <div class="evolution-showcase">
+                    <h3 class="evolution-title">Evolución del Héroe</h3>
+                    <div class="evolution-chain" id="modal-evolution-chain">
+                        <!-- Level sprites and labels will be dynamically injected here -->
+                    </div>
+                </div>
+                
+                <div class="bonus-details">
+                    <h3 class="bonus-title">Bonus de Clase</h3>
+                    <p class="bonus-description" id="modal-bonus-description">
+                        Descripción del bonus.
+                    </p>
+                </div>
+            </div>
+            
+            <footer class="modal-footer">
+                <button type="button" class="btn-select-class" id="btn-select-class">SELECCIONAR CLASE</button>
+            </footer>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="assets/js/storage.js" defer></script>

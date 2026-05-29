@@ -84,8 +84,18 @@
         return CLASS_FOLDERS[cls] || CLASS_FOLDERS[cls.toLowerCase()] || 'guerrero';
     }
 
+    function getSpriteLevel(level) {
+        const lvl = parseInt(level, 10) || 1;
+        if (lvl >= 1 && lvl <= 2) return 1;
+        if (lvl >= 3 && lvl <= 6) return 2;
+        if (lvl >= 7 && lvl <= 9) return 3;
+        if (lvl >= 10) return 4;
+        return 1;
+    }
+
     function buildSpriteSrc(folder, level) {
-        return `../assets/avatares/${folder}/nivel_${level}.png`;
+        const spriteLevel = getSpriteLevel(level);
+        return `../assets/avatares/${folder}/nivel_${spriteLevel}.png`;
     }
 
     function getLevelTitle(level) {
@@ -118,6 +128,16 @@
         const titleEl = document.getElementById('character-title');
 
         if (!banner || !avatar || !nameEl || !levelEl || !titleEl) return;
+
+        // Bind click trigger for lightbox image zoom
+        avatar.onclick = function () {
+            if (window.UI) {
+                const charName = nameEl.textContent;
+                const charLvl = levelEl.textContent;
+                const charTitle = titleEl.textContent;
+                window.UI.showImageLightbox(avatar.src, `${charName} - ${charLvl} (${charTitle})`);
+            }
+        };
 
         if (!user) {
             nameEl.textContent = 'Invitado';
