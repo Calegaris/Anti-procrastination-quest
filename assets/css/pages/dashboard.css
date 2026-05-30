@@ -134,3 +134,115 @@
         font-size: 0.95rem;
     }
 }
+    .active-missions-section {
+        margin-top: var(--spacing-lg);
+        padding-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+        font-family: var(--font-pixel);
+        font-size: 0.75rem;
+        color: var(--color-accent-gold);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .active-missions-list {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: var(--spacing-md);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    @media (min-width: 640px) {
+        .active-missions-list {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    article.dashboard-mission-card {
+        background: var(--color-bg-card);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        border-left: 4px solid transparent;
+        box-shadow: var(--shadow-card);
+        height: 100%;
+    }
+
+    article.dashboard-mission-card.rarity-common {
+        border-left-color: var(--rarity-common);
+    }
+
+    article.dashboard-mission-card.rarity-uncommon {
+        border-left-color: var(--rarity-uncommon);
+    }
+
+    article.dashboard-mission-card.rarity-rare {
+        border-left-color: var(--rarity-rare);
+    }
+
+    article.dashboard-mission-card.rarity-epic {
+        border-left-color: var(--rarity-epic);
+    }
+
+    article.dashboard-mission-card.rarity-legendary {
+        border-left-color: var(--rarity-legendary);
+    }
+
+    article.dashboard-mission-card > header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .dashboard-mission-name {
+        flex: 1;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .dashboard-mission-desc {
+        font-size: 0.82rem;
+        color: var(--color-text-muted);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    article.dashboard-mission-card > footer {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .mission-reward {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+    }
+
+    .btn-complete-mission {
+        margin-left: auto;
+        background: var(--color-accent-gold);
+        color: #000;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-complete-mission:hover {
+        opacity: 0.85;
+    }
+
+    .empty-state-item {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: var(--spacing-xl);
+        color: var(--color-text-muted);
+    }
