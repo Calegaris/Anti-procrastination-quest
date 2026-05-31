@@ -54,6 +54,17 @@ const UI = {
         this.elements.modalEvolutionChain = document.getElementById('modal-evolution-chain');
         this.elements.modalBonusDesc = document.getElementById('modal-bonus-description');
         this.elements.modalConfirmBtn = document.getElementById('btn-select-class');
+
+        // Dashboard reward modal cache
+        this.elements.rewardModal = document.getElementById('mission-reward-modal');
+        this.elements.rewardModalCloseBtn = document.getElementById('reward-modal-close');
+        this.elements.rewardModalActionBtn = document.getElementById('reward-modal-action');
+        this.elements.rewardModalTitle = document.getElementById('reward-modal-title');
+        this.elements.rewardModalSubtitle = document.querySelector('[data-reward-subtitle]');
+        this.elements.rewardModalMessage = document.querySelector('[data-reward-message]');
+        this.elements.rewardModalDetails = document.querySelector('[data-reward-details]');
+        this.elements.rewardModalStreak = document.querySelector('[data-reward-streak]');
+        this.elements.streakDisplay = document.getElementById('character-streak');
     },
 
     /**
@@ -319,6 +330,104 @@ const UI = {
         this.elements.previewRarity = document.getElementById('preview-rarity');
         this.elements.previewExp = document.getElementById('preview-exp');
         this.elements.previewCooldown = document.getElementById('preview-cooldown');
+    },
+
+    /**
+     * Initializes dashboard-specific UI elements.
+     */
+    initDashboard() {
+        this.elements.rewardModal = document.getElementById('mission-reward-modal');
+        this.elements.rewardModalCloseBtn = document.getElementById('reward-modal-close');
+        this.elements.rewardModalActionBtn = document.getElementById('reward-modal-action');
+        this.elements.rewardModalTitle = document.getElementById('reward-modal-title');
+        this.elements.rewardModalSubtitle = document.querySelector('[data-reward-subtitle]');
+        this.elements.rewardModalMessage = document.querySelector('[data-reward-message]');
+        this.elements.rewardModalDetails = document.querySelector('[data-reward-details]');
+        this.elements.rewardModalStreak = document.querySelector('[data-reward-streak]');
+        this.elements.streakDisplay = document.getElementById('character-streak');
+
+        const closeModal = () => this.closeRewardModal();
+
+        if (this.elements.rewardModalCloseBtn) {
+            this.elements.rewardModalCloseBtn.addEventListener('click', closeModal);
+        }
+        if (this.elements.rewardModalActionBtn) {
+            this.elements.rewardModalActionBtn.addEventListener('click', closeModal);
+        }
+        if (this.elements.rewardModal) {
+            this.elements.rewardModal.addEventListener('click', (event) => {
+                if (event.target === this.elements.rewardModal) {
+                    closeModal();
+                }
+            });
+        }
+    },
+
+    /**
+     * Shows the reward confirmation modal with mission completion details.
+     * @param {Object} payload
+     * @param {string} payload.title
+     * @param {string} payload.message
+     * @param {string} payload.subtitle
+     * @param {string} payload.details
+     * @param {string} payload.streakText
+     * @returns {Promise<void>}
+     */
+    showRewardModal({ title, message, subtitle, details, streakText }) {
+        if (!this.elements.rewardModal) {
+            return Promise.resolve();
+        }
+
+        if (this.elements.rewardModalTitle) {
+            this.elements.rewardModalTitle.textContent = title;
+        }
+        if (this.elements.rewardModalSubtitle) {
+            this.elements.rewardModalSubtitle.textContent = subtitle || '';
+        }
+        if (this.elements.rewardModalMessage) {
+            this.elements.rewardModalMessage.textContent = message;
+        }
+        if (this.elements.rewardModalDetails) {
+            this.elements.rewardModalDetails.innerHTML = details || '';
+        }
+        if (this.elements.rewardModalStreak) {
+            this.elements.rewardModalStreak.innerHTML = streakText || '';
+        }
+
+        this.elements.rewardModal.classList.add('active');
+        this.elements.rewardModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+
+        return new Promise((resolve) => {
+            const cleanup = () => {
+                resolve();
+            };
+            this._rewardModalResolve = cleanup;
+        });
+    },
+
+    /**
+     * Closes the reward modal.
+     */
+    closeRewardModal() {
+        if (!this.elements.rewardModal) return;
+        this.elements.rewardModal.classList.remove('active');
+        this.elements.rewardModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        if (typeof this._rewardModalResolve === 'function') {
+            this._rewardModalResolve();
+            this._rewardModalResolve = null;
+        }
+    },
+
+    /**
+     * Updates the streak counter display in the dashboard header.
+     * @param {Object} user
+     */
+    updateStreakDisplay(user) {
+        if (!this.elements.streakDisplay) return;
+        const streak = parseInt(user?.streak ?? 0, 10) || 0;
+        this.elements.streakDisplay.textContent = `${streak} día${streak === 1 ? '' : 's'}`;
     },
 
     /**
