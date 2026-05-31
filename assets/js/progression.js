@@ -96,6 +96,65 @@
         return Math.round(base * multiplier);
     }
 
+    function getClassBonusText(expBase, userClass) {
+        const base = parseInt(expBase, 10) || 0;
+        const finalExp = applyClassBonus(base, userClass);
+        if (finalExp === base) {
+            return 'Sin bonificación de clase.';
+        }
+        return `Bono aplicado: +${finalExp - base} XP.`;
+    }
+
+    function calculateMissionReward(expBase, userClass) {
+        const finalExp = applyClassBonus(expBase, userClass);
+        return {
+            finalExp,
+            bonusText: getClassBonusText(expBase, userClass)
+        };
+    }
+
+    function normalizeDateKey(dateValue) {
+        if (!dateValue) return null;
+        const parsed = new Date(dateValue);
+        if (Number.isNaN(parsed.getTime())) return null;
+        return parsed.toISOString().slice(0, 10);
+    }
+
+    function updateDailyStreak(user) {
+        if (!user) {
+            return { updated: false, streak: 0 };
+        }
+
+        const todayKey = new Date().toISOString().slice(0, 10);
+        const lastKey = normalizeDateKey(user.lastStreakDate) || normalizeDateKey(user.lastLoginDate);
+        let streak = parseInt(user.streak, 10) || 0;
+
+        if (lastKey === todayKey) {
+            return { updated: false, streak };
+        }
+
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayKey = yesterday.toISOString().slice(0, 10);
+
+        if (lastKey === yesterdayKey) {
+            streak += 1;
+        } else {
+            streak = 1;
+        }
+
+        user.streak = streak;
+        user.lastStreakDate = todayKey;
+        if (user.experiencia !== undefined) user.experiencia = parseInt(user.experiencia, 10) || 0;
+        if (user.experience !== undefined) user.experience = parseInt(user.experience, 10) || 0;
+
+        if (window.Storage && typeof window.Storage.saveUser === 'function') {
+            window.Storage.saveUser(user);
+        }
+
+        return { updated: true, streak, continued: lastKey === yesterdayKey };
+    }
+
     /**
      * Adds experience to the current user, applying level-up detection.
      * @param {number} amount - Amount of final experience to add.
@@ -171,6 +230,8 @@
         getExpRequired,
         calculateExpPercentage,
         applyClassBonus,
+        calculateMissionReward,
+        updateDailyStreak,
         addExperience
     };
 })();
