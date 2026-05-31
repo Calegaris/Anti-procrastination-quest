@@ -145,8 +145,19 @@
 
             <!-- Right Column: Dashboard Active Missions List -->
             <section class="missions-board">
-                <h2 class="section-title">⚔️ Misiones del Gremio</h2>
-                <div id="missions-list" class="missions-list-container">
+                    <h2 class="section-title">⚔️ Misiones del Gremio</h2>
+
+                    <div class="missions-filters" id="missions-filters">
+                        <label for="mission-filter-status" class="form-label">Filtrar por estado:</label>
+                        <select id="mission-filter-status" class="input-field select-field">
+                            <option value="all" selected>Todos</option>
+                            <option value="active">Activas</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="completed">Completadas</option>
+                        </select>
+                    </div>
+
+                    <div id="missions-list" class="missions-list-container">
                     <!-- Dynamic mission list will be rendered here -->
                     <div class="empty-state">
                         <div class="empty-icon">🛡️</div>
