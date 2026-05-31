@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    if (window.UI && typeof window.UI.initDashboard === 'function') {
+        window.UI.initDashboard();
+        window.UI.updateStreakDisplay(window.Storage.getUser());
+    }
+
     const activeMissionsList = document.getElementById('active-missions-list');
 
     const escapeHTML = (str) => {
@@ -66,6 +71,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
     };
 
+    const completeMission = (missionId) => {
+        if (!missionId || !window.Storage || !window.Progression || !window.UI) return;
+
+        const user = window.Storage.getUser();
+        const missions = window.Storage.getMissions() || [];
+        const mission = missions.find((item) => item.id === missionId);
+        if (!user || !mission || mission.status !== 'active') return;
+
+        const reward = window.Progression.calculateMissionReward(mission.exp, user.class);
+        const result = window.Progression.addExperience(reward.finalExp);
+        const streakResult = window.Progression.updateDailyStreak(user);
+
+        mission.status = 'completed';
+        mission.completedAt = new Date().toISOString();
+        window.Storage.saveMissions(missions);
+
+        const updatedUser = window.Storage.getUser();
+        if (typeof window.renderExpBar === 'function') {
+            window.renderExpBar(updatedUser);
+        }
+        if (window.UI && typeof window.UI.updateStreakDisplay === 'function') {
+            window.UI.updateStreakDisplay(updatedUser);
+        }
+
+        const bonusLine = reward.bonusText || 'Sin bonificación de clase.';
+        const streakLine = streakResult.updated
+            ? `Tu racha diaria ahora es de <strong>${streakResult.streak} día${streakResult.streak === 1 ? '' : 's'}</strong>.`
+            : `Ya completaste una misión hoy. Tu racha se mantiene en <strong>${streakResult.streak} día${streakResult.streak === 1 ? '' : 's'}</strong>.`;
+
+        window.UI.showRewardModal({
+            title: '¡Misión completada!',
+            subtitle: `Has ganado +${reward.finalExp} XP`,
+            message: `La misión "${mission.name}" se completó con éxito.`,
+            details: `
+                <ul class="reward-list">
+                    <li><strong>XP base:</strong> +${mission.exp} XP</li>
+                    <li><strong>XP final:</strong> +${reward.finalExp} XP</li>
+                    <li>${bonusLine}</li>
+                </ul>
+            `,
+            streakText: streakLine
+        }).then(() => {
+            if (result && result.leveledUp) {
+                window.UI.showToast(`🎉 ¡SUBISTE DE NIVEL! Ahora eres Nivel ${result.newLevel} (${result.newTitle})`);
+            }
+        });
+
+        renderActiveMissions();
+    };
+
     if (activeMissionsList) {
         activeMissionsList.addEventListener('click', (event) => {
             const button = event.target.closest('.btn-complete-mission');
@@ -73,30 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             event.stopPropagation();
             const missionId = button.dataset.id;
-            if (!missionId || !window.Storage || !window.Progression || !window.UI) return;
-
-            const user = window.Storage.getUser();
-            const missions = window.Storage.getMissions() || [];
-            const mission = missions.find((item) => item.id === missionId);
-            if (!user || !mission) return;
-
-            const finalExp = window.Progression.applyClassBonus(mission.exp, user.class);
-            const result = window.Progression.addExperience(finalExp);
-            const updatedMissions = missions.filter((item) => item.id !== missionId);
-            window.Storage.saveMissions(updatedMissions);
-
-            const updatedUser = window.Storage.getUser();
-            if (typeof window.renderExpBar === 'function') {
-                window.renderExpBar(updatedUser);
-            }
-
-            window.UI.showToast(`¡Misión completada! Has ganado +${finalExp} EXP.`).then(() => {
-                if (result && result.leveledUp) {
-                    window.UI.showToast(`🎉 ¡SUBISTE DE NIVEL! Ahora eres Nivel ${result.newLevel} (${result.newTitle})`);
-                }
-            });
-
-            renderActiveMissions();
+            completeMission(missionId);
         });
     }
 
