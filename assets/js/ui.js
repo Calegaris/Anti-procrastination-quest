@@ -511,10 +511,22 @@ const UI = {
      * Renders the custom missions list in the container.
      * @param {Array} missions - The array of mission objects to render.
      */
-    renderMissionsList(missions) {
+    renderMissionsList(missions, emptyMessage) {
         if (!this.elements.missionsListContainer) return;
 
-        if (missions.length === 0) {
+        if (!missions || missions.length === 0) {
+            // If an explicit empty message is provided (e.g. a filter result), show it.
+            if (emptyMessage && typeof emptyMessage === 'string') {
+                this.elements.missionsListContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🛡️</div>
+                        <p class="empty-title">${emptyMessage}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Default empty state when there are no custom missions saved
             this.elements.missionsListContainer.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-icon">🛡️</div>
