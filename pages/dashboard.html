@@ -33,6 +33,10 @@
                     <span class="character-level" id="character-level">Nivel 1</span>
                     <span class="character-title" id="character-title">Novato Persistente</span>
                 </div>
+                <div class="character-streak">
+                    <span class="streak-label">Racha diaria</span>
+                    <span class="streak-value" id="character-streak">0 días</span>
+                </div>
                 <!-- Experience Progression Bar (HU-05) -->
                 <div class="exp-bar" id="xp-container">
                     <div class="xp-bar-track" id="xp-bar-track">
@@ -67,6 +71,25 @@
             <span>Perfil</span>
         </a>
     </nav>
+
+    <!-- Reward confirmation modal -->
+    <div id="mission-reward-modal" class="modal-overlay reward-modal" aria-hidden="true" role="dialog" aria-labelledby="reward-modal-title">
+        <div class="modal-content reward-modal-card">
+            <button type="button" class="modal-close-btn" id="reward-modal-close" aria-label="Cerrar">&times;</button>
+            <header class="reward-modal-header">
+                <h2 class="reward-modal-title" id="reward-modal-title">Recompensa obtenida</h2>
+                <p class="reward-modal-subtitle" data-reward-subtitle=""></p>
+            </header>
+            <div class="reward-modal-body">
+                <p class="reward-message" data-reward-message=""></p>
+                <div class="reward-details" data-reward-details=""></div>
+                <p class="reward-streak" data-reward-streak=""></p>
+            </div>
+            <footer class="reward-modal-footer">
+                <button type="button" class="btn btn-primary" id="reward-modal-action">Cerrar</button>
+            </footer>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="../assets/js/storage.js"></script>
