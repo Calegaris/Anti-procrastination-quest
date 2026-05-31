@@ -293,12 +293,58 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function syncMissionsList() {
         if (window.Storage && window.UI) {
-            const missions = window.Storage.getMissions();
-            window.UI.renderMissionsList(missions);
+            const selected = getSelectedFilter();
+            filterMissions(selected);
         }
     }
 
+    /**
+     * Returns the currently selected filter value from the UI.
+     * Defaults to 'all' when the element is missing.
+     */
+    function getSelectedFilter() {
+        const el = document.getElementById('mission-filter-status');
+        if (!el) return 'all';
+        return el.value || 'all';
+    }
+
+    /**
+     * Filters missions by status and renders the resulting list.
+     * @param {string} status - 'all' | 'active' | 'pending' | 'completed'
+     * @returns {Array} the filtered missions
+     */
+    function filterMissions(status) {
+        if (!window.Storage || !window.UI) return [];
+        const missions = window.Storage.getMissions() || [];
+
+        if (!status || status === 'all') {
+            window.UI.renderMissionsList(missions);
+            return missions;
+        }
+
+        const filtered = missions.filter((m) => {
+            const s = m.status || 'active';
+            return s === status;
+        });
+
+        if (filtered.length === 0) {
+            window.UI.renderMissionsList([], 'No missions found for this filter.');
+        } else {
+            window.UI.renderMissionsList(filtered);
+        }
+
+        return filtered;
+    }
+
     // 5. Initial paint on DOM content loaded
+    // Bind filter control change to re-render list
+    const filterSelectEl = document.getElementById('mission-filter-status');
+    if (filterSelectEl) {
+        filterSelectEl.addEventListener('change', () => {
+            syncMissionsList();
+        });
+    }
+
     syncMissionsList();
     validateFormState(); // Set initial disabled state for button
 });
