@@ -1,0 +1,248 @@
+/* Dashboard page styles for the Character Banner */
+.character-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+}
+
+.character-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.05);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    image-rendering: pixelated;
+}
+
+.character-avatar:hover {
+    transform: scale(1.06);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+}
+
+.character-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+}
+
+.character-name {
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+}
+
+.character-level-title {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: baseline;
+}
+
+.character-level {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent-gold);
+}
+
+.character-title {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+/* Experience Bar (HU-05) */
+.xp-container,
+.exp-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.xp-bar-track {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.xp-bar-fill,
+.exp-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-accent-magic) 0%, #60a5fa 100%);
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.xp-text,
+.exp-bar-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.xp-text.max-level-text,
+.exp-bar-text.max-level-text {
+    color: var(--color-accent-gold);
+    font-family: var(--font-pixel);
+    font-size: 0.7rem;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    animation: goldGlow 2s infinite ease-in-out;
+}
+
+@keyframes goldGlow {
+    0%, 100% {
+        text-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+    }
+    50% {
+        text-shadow: 0 0 14px rgba(212, 175, 55, 0.8);
+    }
+}
+
+@media (min-width: 768px) {
+    .character-banner {
+        padding: var(--spacing-lg);
+    }
+
+    .character-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .character-name {
+        font-size: 1.15rem;
+    }
+
+    .character-level,
+    .character-title {
+        font-size: 0.95rem;
+    }
+}
+    .active-missions-section {
+        margin-top: var(--spacing-lg);
+        padding-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+        font-family: var(--font-pixel);
+        font-size: 0.75rem;
+        color: var(--color-accent-gold);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .active-missions-list {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: var(--spacing-md);
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    @media (min-width: 640px) {
+        .active-missions-list {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    article.dashboard-mission-card {
+        background: var(--color-bg-card);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        border-left: 4px solid transparent;
+        box-shadow: var(--shadow-card);
+        height: 100%;
+    }
+
+    article.dashboard-mission-card.rarity-common {
+        border-left-color: var(--rarity-common);
+    }
+
+    article.dashboard-mission-card.rarity-uncommon {
+        border-left-color: var(--rarity-uncommon);
+    }
+
+    article.dashboard-mission-card.rarity-rare {
+        border-left-color: var(--rarity-rare);
+    }
+
+    article.dashboard-mission-card.rarity-epic {
+        border-left-color: var(--rarity-epic);
+    }
+
+    article.dashboard-mission-card.rarity-legendary {
+        border-left-color: var(--rarity-legendary);
+    }
+
+    article.dashboard-mission-card > header {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .dashboard-mission-name {
+        flex: 1;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .dashboard-mission-desc {
+        font-size: 0.82rem;
+        color: var(--color-text-muted);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    article.dashboard-mission-card > footer {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .mission-reward {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+    }
+
+    .btn-complete-mission {
+        margin-left: auto;
+        background: var(--color-accent-gold);
+        color: #000;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 6px 14px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-complete-mission:hover {
+        opacity: 0.85;
+    }
+
+    .empty-state-item {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: var(--spacing-xl);
+        color: var(--color-text-muted);
+    }

@@ -1,13 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gremio de Misiones - Anti-Procrastination Quest</title>
+    <meta name="description"
+        content="Crea misiones personalizadas para combatir la procrastinación, subir de nivel a tu héroe y obtener recompensas de experiencia." />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS stylesheets -->
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/pages/missions.css">
 </head>
 
 <body>
+
+    <main class="app-container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <a href="dashboard.html" class="btn-back" id="btn-back-dashboard">← Volver</a>
+                <h1 class="page-title">GREMIO DE MISIONES</h1>
+                <p class="page-subtitle">Personaliza tu propio tablero de aventuras para ganar recompensas y experiencia
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Page Layout Grid -->
+        <div class="missions-page-grid">
+            <!-- Left Column: Creation Form & Live Preview -->
+            <section class="creation-panel">
+                <h2 class="section-title">✨ Crear Nueva Aventura</h2>
+
+                <form id="mission-form" novalidate>
+                    <!-- Mission Name Input -->
+                    <div class="form-group">
+                        <label for="mission-name" class="form-label">
+                            Nombre de la Misión
+                            <span id="mission-name-counter" class="char-counter">0/40</span>
+                        </label>
+                        <div class="input-container">
+                            <input type="text" id="mission-name" class="input-field"
+                                placeholder="Ej. Estudiar React 1 hora..." maxlength="40" required autocomplete="off" />
+                        </div>
+                        <span id="mission-name-error" class="error-feedback"></span>
+                    </div>
+
+                    <!-- Mission Description Input -->
+                    <div class="form-group">
+                        <label for="mission-desc" class="form-label">Descripción de la Tarea</label>
+                        <div class="input-container">
+                            <textarea id="mission-desc" class="input-field textarea-field"
+                                placeholder="Describe el objetivo y las condiciones de victoria..." maxlength="150"
+                                rows="3" required></textarea>
+                        </div>
+                        <span id="mission-desc-error" class="error-feedback"></span>
+                    </div>
+
+                    <!-- Two columns for Select fields -->
+                    <div class="selects-row">
+                        <!-- Category Select -->
+                        <div class="form-group flex-1">
+                            <label for="mission-category" class="form-label">Categoría</label>
+                            <select id="mission-category" class="input-field select-field" required>
+                                <option value="" disabled selected>Elegir...</option>
+                                <option value="estudio">📚 Estudio</option>
+                                <option value="trabajo">💻 Trabajo</option>
+                                <option value="limpieza">🧹 Limpieza</option>
+                                <option value="bienestar">🧘 Bienestar</option>
+                                <option value="creatividad">🎨 Creatividad</option>
+                            </select>
+                        </div>
+
+                        <!-- Difficulty Select -->
+                        <div class="form-group flex-1">
+                            <label for="mission-difficulty" class="form-label">Dificultad</label>
+                            <select id="mission-difficulty" class="input-field select-field" required>
+                                <option value="" disabled selected>Elegir...</option>
+                                <option value="facil">Fácil</option>
+                                <option value="medio">Medio</option>
+                                <option value="dificil">Difícil</option>
+                                <option value="epico">Épico</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Cooldown Select -->
+                    <div class="form-group">
+                        <label for="mission-cooldown" class="form-label">Cooldown / Frecuencia</label>
+                        <select id="mission-cooldown" class="input-field select-field" required>
+                            <option value="" disabled selected>Selecciona frecuencia...</option>
+                            <option value="0">Sin Cooldown (Una sola vez)</option>
+                            <option value="1">1 hora</option>
+                            <option value="12">12 horas</option>
+                            <option value="24">24 horas (Diaria)</option>
+                            <option value="168">7 días (Semanal)</option>
+                        </select>
+                    </div>
+
+                    <!-- Global validation message -->
+                    <span id="mission-error-message" class="error-feedback select-error"></span>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="btn-mission-submit" class="btn-adventure btn-mission disabled" disabled>
+                        REGISTRAR EN EL CODICE
+                    </button>
+                </form>
+
+                <!-- Live Card Preview -->
+                <div class="preview-section-container">
+                    <h3 class="preview-title">👁️ Vista Previa de la Carta</h3>
+                    <div id="preview-card" class="mission-preview-card rarity-common">
+                        <div class="preview-card-header">
+                            <div class="preview-title-group">
+                                <span id="preview-category-icon" class="preview-icon">⚔️</span>
+                                <h4 id="preview-name" class="preview-card-name">Nombre de la Misión</h4>
+                            </div>
+                            <span id="preview-rarity" class="rarity-badge rarity-common">Común</span>
+                        </div>
+                        <p id="preview-desc" class="preview-card-desc">Aquí aparecerá la descripción de tu misión...</p>
+                        <div class="preview-card-footer">
+                            <div class="preview-meta-group">
+                                <span id="preview-category-text" class="preview-meta-tag">Misión</span>
+                                <span id="preview-cooldown" class="preview-cooldown-badge">⏱️ Sin Cooldown</span>
+                            </div>
+                            <div class="preview-reward">
+                                <span class="exp-icon">💎</span>
+                                <span id="preview-exp" class="exp-value">50 XP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Dashboard Active Missions List -->
+            <section class="missions-board">
+                <h2 class="section-title">⚔️ Misiones del Gremio</h2>
+
+                <!-- Filtros combinados de Estado y Categoría -->
+                <div class="missions-filters" id="missions-filters">
+                    <div class="filter-group">
+                        <label for="mission-filter-status" class="filter-label">Estado</label>
+                        <select id="mission-filter-status" class="input-field select-field">
+                            <option value="all" selected>Todos</option>
+                            <option value="activa">Activas</option>
+                            <option value="inactiva">Inactivas</option>
+                            <option value="completada">Completadas</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="mission-filter-category" class="filter-label">Categoría</label>
+                        <select id="mission-filter-category" class="input-field select-field">
+                            <option value="all" selected>Todas</option>
+                            <option value="estudio">📚 Estudio</option>
+                            <option value="trabajo">💻 Trabajo</option>
+                            <option value="limpieza">🧹 Limpieza</option>
+                            <option value="bienestar">🧘 Bienestar</option>
+                            <option value="creatividad">🎨 Creatividad</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="missions-list" class="missions-list-container">
+                    <!-- Dynamic mission list will be rendered here -->
+                    <div class="empty-state">
+                        <div class="empty-icon">🛡️</div>
+                        <p class="empty-title">Aún no tienes misiones customizadas</p>
+                        <p class="empty-desc">Crea tu primera misión para empezar a ganar experiencia y vencer a la
+                            procrastinación.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item" id="nav-dashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="missions.html" class="nav-item active" id="nav-missions">
+            <span class="nav-icon">⚔️</span>
+            <span>Misiones</span>
+        </a>
+    </nav>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div id="delete-confirm-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-delete-title">
+        <div class="modal-card delete-card">
+            <button type="button" class="modal-close-btn" id="modal-delete-close-btn" aria-label="Cerrar">&times;</button>
+            
+            <header class="modal-header">
+                <span class="modal-class-icon">⚠️</span>
+                <h2 class="modal-class-title" id="modal-delete-title">Confirmar Acción</h2>
+            </header>
+            
+            <div class="modal-body text-center">
+                <p class="delete-warning-text">¿Estás seguro de que querés eliminar esta misión?</p>
+            </div>
+            
+            <footer class="modal-footer delete-footer">
+                <button type="button" class="btn-cancel-delete" id="btn-cancel-delete">CANCELAR</button>
+                <button type="button" class="btn-confirm-delete" id="btn-confirm-delete">CONFIRMAR</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts defer loading -->
+    <script src="../assets/js/storage.js" defer></script>
+    <script src="../assets/js/progression.js" defer></script>
+    <script src="../assets/js/ui.js" defer></script>
+    <script src="../assets/js/pages/missions.js" defer></script>
 
 </body>
 

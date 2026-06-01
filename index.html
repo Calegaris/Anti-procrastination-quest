@@ -1,13 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Anti Procrastination Quest - Inicio</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/pages/login.css">
 </head>
 
 <body>
+
+    <main class="app-container">
+        <div class="login-page-wrapper">
+            <div class="login-card">
+                <header class="login-header">
+                    <h1 class="login-title">ANTI-PROCRASTINATION<br>QUEST</h1>
+                    <p class="login-subtitle">Comienza tu aventura contra la procrastinación</p>
+                </header>
+
+                <form id="login-form" novalidate>
+                    <!-- Input Nombre -->
+                    <div class="form-group">
+                        <label for="player-name" class="form-label">
+                            Nombre del Héroe
+                            <span id="char-counter" class="char-counter">0/30</span>
+                        </label>
+                        <div class="input-container">
+                            <input 
+                                type="text" 
+                                id="player-name" 
+                                class="input-field" 
+                                placeholder="Escribe tu nombre..." 
+                                maxlength="30"
+                                required
+                                autocomplete="off"
+                            />
+                        </div>
+                        <span id="error-message" class="error-feedback"></span>
+                    </div>
+
+                    <!-- Selección de Clase -->
+                    <div class="form-group">
+                        <label class="form-label">Selecciona tu Clase</label>
+                        <div class="class-grid" id="class-grid">
+                            <!-- Cards will be dynamically injected here via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Botón para Jugar -->
+                    <div class="btn-submit-wrapper">
+                        <button type="submit" id="btn-submit" class="btn-adventure disabled" disabled>
+                            EMPEZAR AVENTURA
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Detalles de Clase (Evolution Showcase) -->
+    <div id="class-details-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-class-title">
+        <div class="modal-card">
+            <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar">&times;</button>
+            
+            <header class="modal-header">
+                <span class="modal-class-icon" id="modal-class-icon">⚔️</span>
+                <h2 class="modal-class-title" id="modal-class-title">Guerrero</h2>
+            </header>
+            
+            <div class="modal-body">
+                <!-- Evolution path showcase -->
+                <div class="evolution-showcase">
+                    <h3 class="evolution-title">Evolución del Héroe</h3>
+                    <div class="evolution-chain" id="modal-evolution-chain">
+                        <!-- Level sprites and labels will be dynamically injected here -->
+                    </div>
+                </div>
+                
+                <div class="bonus-details">
+                    <h3 class="bonus-title">Bonus de Clase</h3>
+                    <p class="bonus-description" id="modal-bonus-description">
+                        Descripción del bonus.
+                    </p>
+                </div>
+            </div>
+            
+            <footer class="modal-footer">
+                <button type="button" class="btn-select-class" id="btn-select-class">SELECCIONAR CLASE</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/storage.js" defer></script>
+    <script src="assets/js/ui.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
 
 </body>
 

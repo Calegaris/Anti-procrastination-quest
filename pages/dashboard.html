@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Anti Procrastination Quest</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <link rel="stylesheet" href="../assets/css/pages/dashboard.css">
+</head>
+
+<body>
+
+    <main class="app-container">
+
+        <section class="character-banner" role="region" aria-label="Banner del personaje" id="character-banner">
+            <img id="avatar-img" class="character-avatar" src="" alt="Avatar del jugador" width="72" height="72">
+            <div class="character-info">
+                <div class="character-name" id="character-name">Invitado</div>
+                <div class="character-level-title">
+                    <span class="character-level" id="character-level">Nivel 1</span>
+                    <span class="character-title" id="character-title">Novato Persistente</span>
+                </div>
+                <!-- Experience Progression Bar (HU-05) -->
+                <div class="exp-bar" id="xp-container">
+                    <div class="xp-bar-track" id="xp-bar-track">
+                        <div class="exp-bar-fill" id="xp-bar-fill"></div>
+                    </div>
+                    <span class="exp-bar-text" id="xp-text">0 / 100 EXP</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="active-missions-section" id="active-missions-section" aria-labelledby="active-missions-heading">
+            <h2 class="section-title" id="active-missions-heading">⚔️ Misiones Activas</h2>
+            <ul class="active-missions-list" id="active-missions-list" aria-live="polite">
+                <!-- rendered by dashboard.js -->
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active" id="nav-dashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="missions.html" class="nav-item" id="nav-missions">
+            <span class="nav-icon">⚔️</span>
+            <span>Misiones</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/progression.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/character-banner.js"></script>
+    <script src="../assets/js/pages/dashboard.js"></script>
+</body>
+
+</html>
