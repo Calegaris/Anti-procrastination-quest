@@ -289,16 +289,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Instantly grabs saved missions from Storage and renders them on the board.
+     * Filters the missions by category and chains with the state filter, then renders.
+     * @param {string} category - 'all' | category code
      */
-    function syncMissionsList() {
-        if (window.Storage && window.UI) {
-            const missions = window.Storage.getMissions();
-            window.UI.renderMissionsList(missions);
+    function filterByCategory(category) {
+        if (!window.Storage || !window.UI) return;
+
+        const missions = window.Storage.getMissions() || [];
+        const statusEl = document.getElementById('mission-filter-status');
+        const status = statusEl ? statusEl.value : 'all';
+
+        // 1. Apply category filter
+        let filtered = missions;
+        if (category && category !== 'all') {
+            filtered = filtered.filter(m => {
+                const cat = (m.category || m.categoria || '').toLowerCase().trim();
+                return cat === category.toLowerCase().trim();
+            });
+        }
+
+        // 2. Chain and apply status filter
+        if (status && status !== 'all') {
+            filtered = filtered.filter(m => {
+                const s = m.status || 'active';
+                return s === status;
+            });
+        }
+
+        // 3. Render results
+        if (missions.length === 0) {
+            // Default empty state when no missions are saved at all
+            window.UI.renderMissionsList([]);
+        } else if (filtered.length === 0) {
+            // Filtered empty state when no missions match current criteria
+            window.UI.renderMissionsList([], 'No se encontraron misiones', 'Prueba cambiando los filtros de estado o categoría.');
+        } else {
+            window.UI.renderMissionsList(filtered);
         }
     }
 
+    /**
+     * Instantly grabs saved missions from Storage and renders them on the board.
+     */
+    function syncMissionsList() {
+        const categoryEl = document.getElementById('mission-filter-category');
+        const category = categoryEl ? categoryEl.value : 'all';
+        filterByCategory(category);
+    }
+
     // 5. Initial paint on DOM content loaded
+    const filterStatusEl = document.getElementById('mission-filter-status');
+    const filterCategoryEl = document.getElementById('mission-filter-category');
+
+    if (filterStatusEl) {
+        filterStatusEl.addEventListener('change', () => {
+            syncMissionsList();
+        });
+    }
+
+    if (filterCategoryEl) {
+        filterCategoryEl.addEventListener('change', () => {
+            syncMissionsList();
+        });
+    }
+
     syncMissionsList();
     validateFormState(); // Set initial disabled state for button
 });
