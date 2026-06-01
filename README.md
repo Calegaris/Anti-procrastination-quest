@@ -135,33 +135,31 @@ anti-procrastination-quest/
 ├── informe-ia.md                 # Academic report on AI usage
 ├── .gitignore                    # Git ignore rule specifications
 │
-├── assets/                       # Static resources
-│   ├── avatares/                 # Evolved hero sprites
-│   │   ├── guerrero/             # Warrior sprites (nivel_1 to nivel_4)
-│   │   └── mago/                 # Mage sprites (nivel_1 to nivel_4)
-│   │
-│   ├── css/                      # Stylesheets
-│   │   ├── variables.css         # Design system tokens, variables, and typography
-│   │   ├── global.css            # Base resets and global body settings
-│   │   ├── layout.css            # Application shells and navigation layouts
-│   │   ├── components.css        # Buttons, inputs, cards, and modal components
-│   │   └── pages/                # Page-specific styling
-│   │       ├── login.css         # Onboarding page CSS
-│   │       ├── dashboard.css     # Main dashboard CSS and XP bar glow
-│   │       └── missions.css      # Guild board form, live card, and lists
-│   │
-│   └── js/                       # JavaScript modules
-│       ├── storage.js            # LocalStorage utility wrapper and operations
-│       ├── progression.js        # RPG progression engine, experience math, and multipliers
-│       ├── ui.js                 # DOM cache manager, modal, toasts, and lightbox controls
-│       ├── character-banner.js   # Character banner renderer, responsive sprites, and SVGs
-│       ├── main.js               # Welcome page controller and onboarding rules
-│       └── pages/                # Page-specific control flows
-│           ├── dashboard.js      # Dashboard controller (active lists)
-│           └── missions.js       # Missions guild controller (form events, filters, and actions)
-│
-└── scratch/                      # Playgrounds and test suites
-    └── verify.js                 # Automated progression engine validation tests
+└── assets/                       # Static resources
+    ├── avatares/                 # Evolved hero sprites
+    │   ├── guerrero/             # Warrior sprites (nivel_1 to nivel_4)
+    │   └── mago/                 # Mage sprites (nivel_1 to nivel_4)
+    │
+    ├── css/                      # Stylesheets
+    │   ├── variables.css         # Design system tokens, variables, and typography
+    │   ├── global.css            # Base resets and global body settings
+    │   ├── layout.css            # Application shells and navigation layouts
+    │   ├── components.css        # Buttons, inputs, cards, and modal components
+    │   └── pages/                # Page-specific styling
+    │       ├── login.css         # Onboarding page CSS
+    │       ├── dashboard.css     # Main dashboard CSS and XP bar glow
+    │       └── missions.css      # Guild board form, live card, and lists
+    │
+    └── js/                       # JavaScript modules
+        ├── storage.js            # LocalStorage utility wrapper and operations
+        ├── progression.js        # RPG progression engine, experience math, and multipliers
+        ├── ui.js                 # DOM cache manager, modal, toasts, and lightbox controls
+        ├── character-banner.js   # Character banner renderer, responsive sprites, and SVGs
+        ├── main.js               # Welcome page controller and onboarding rules
+        └── pages/                # Page-specific control flows
+            ├── dashboard.js      # Dashboard controller (active lists)
+            └── missions.js       # Missions guild controller (form events, filters, and actions)
+ 
 ```
 
 ---
@@ -425,33 +423,32 @@ anti-procrastination-quest/
 ├── informe-ia.md                 # Informe académico del uso de Inteligencia Artificial
 ├── .gitignore                    # Reglas de exclusión de Git
 │
-├── assets/                       # Recursos estáticos del sistema
-│   ├── avatares/                 # Sprites de evolución del héroe
-│   │   ├── guerrero/             # Sprites del Guerrero (nivel_1 a nivel_4)
-│   │   └── mago/                 # Sprites del Mago (nivel_1 a nivel_4)
-│   │
-│   ├── css/                      # Estilos globales y específicos
-│   │   ├── variables.css         # Tokens de diseño, colores y tipografías
-│   │   ├── global.css            # Reinicios CSS y configuraciones base del body
-│   │   ├── layout.css            # Envoltorios de app y menús de navegación
-│   │   ├── components.css        # Botones, entradas de formulario, tarjetas y modals
-│   │   └── pages/                # Estilos específicos de cada página
-│   │       ├── login.css         # Estilos del onboarding de bienvenida
-│   │       ├── dashboard.css     # Panel principal y barra de XP
-│   │       └── missions.css      # Panel de creación, preview y listados
-│   │
-│   └── js/                       # Módulos de lógica en JavaScript
-│       ├── storage.js            # Módulo de operaciones y persistencia en LocalStorage
-│       ├── progression.js        # Motor RPG, fórmulas de XP y multiplicadores de clase
-│       ├── ui.js                 # Manejo visual del DOM, modals, toasts y lightboxes
-│       ├── character-banner.js   # Renderizador del banner, avatares dinámicos y SVGs
-│       ├── main.js               # Controlador de index.html (onboarding)
-│       └── pages/                # Lógica asociada a vistas específicas
-│           ├── dashboard.js      # Controlador de dashboard.html (misiones activas)
-│           └── missions.js       # Controlador de missions.html (formulario, filtros y acciones)
-│
-└── scratch/                      # Pruebas y scripts de desarrollo
-    └── verify.js                 # Casos de prueba automatizados para el motor de XP
+└── assets/                       # Recursos estáticos del sistema
+    ├── avatares/                 # Sprites de evolución del héroe
+    │   ├── guerrero/             # Sprites del Guerrero (nivel_1 a nivel_4)
+    │   └── mago/                 # Sprites del Mago (nivel_1 a nivel_4)
+    │
+    ├── css/                      # Estilos globales y específicos
+    │   ├── variables.css         # Tokens de diseño, colores y tipografías
+    │   ├── global.css            # Reinicios CSS y configuraciones base del body
+    │   ├── layout.css            # Envoltorios de app y menús de navegación
+    │   ├── components.css        # Botones, entradas de formulario, tarjetas y modals
+    │   └── pages/                # Estilos específicos de cada página
+    │       ├── login.css         # Estilos del onboarding de bienvenida
+    │       ├── dashboard.css     # Panel principal y barra de XP
+    │       └── missions.css      # Panel de creación, preview y listados
+    │
+    └── js/                       # Módulos de lógica en JavaScript
+        ├── storage.js            # Módulo de operaciones y persistencia en LocalStorage
+        ├── progression.js        # Motor RPG, fórmulas de XP y multiplicadores de clase
+        ├── ui.js                 # Manejo visual del DOM, modals, toasts y lightboxes
+        ├── character-banner.js   # Renderizador del banner, avatares dinámicos y SVGs
+        ├── main.js               # Controlador de index.html (onboarding)
+        └── pages/                # Lógica asociada a vistas específicas
+            ├── dashboard.js      # Controlador de dashboard.html (misiones activas)
+            └── missions.js       # Controlador de missions.html (formulario, filtros y acciones)
+
+
 ```
 
 ---
