@@ -319,6 +319,12 @@ const UI = {
         this.elements.previewRarity = document.getElementById('preview-rarity');
         this.elements.previewExp = document.getElementById('preview-exp');
         this.elements.previewCooldown = document.getElementById('preview-cooldown');
+
+        // Delete Confirmation Modal Cache
+        this.elements.deleteModal = document.getElementById('delete-confirm-modal');
+        this.elements.deleteCloseBtn = document.getElementById('modal-delete-close-btn');
+        this.elements.cancelDeleteBtn = document.getElementById('btn-cancel-delete');
+        this.elements.confirmDeleteBtn = document.getElementById('btn-confirm-delete');
     },
 
     /**
@@ -549,10 +555,50 @@ const UI = {
                 else cooldownText = `${mission.cooldown} horas`;
             }
 
+            // State details
+            const estado = (mission.estado || mission.status || 'activa').toLowerCase();
+            let estadoLabel = 'Activa';
+            let estadoClass = 'state-activa';
+            let actionsHTML = '';
+
+            if (estado === 'activa' || estado === 'active') {
+                estadoLabel = 'Activa';
+                estadoClass = 'state-activa';
+                actionsHTML = `
+                    <button type="button" class="btn-complete-mission" data-id="${mission.id}">
+                        ⚔️ Completar
+                    </button>
+                    <button type="button" class="btn-delete-mission" data-id="${mission.id}">
+                        🗑️ Eliminar
+                    </button>
+                `;
+            } else if (estado === 'inactiva' || estado === 'inactive' || estado === 'vencida') {
+                estadoLabel = 'Inactiva';
+                estadoClass = 'state-inactiva';
+                actionsHTML = `
+                    <button type="button" class="btn-reactivate-mission" data-id="${mission.id}">
+                        🔄 Reactivar
+                    </button>
+                    <button type="button" class="btn-delete-mission" data-id="${mission.id}">
+                        🗑️ Eliminar
+                    </button>
+                `;
+            } else {
+                // completada / completed
+                estadoLabel = 'Completada';
+                estadoClass = 'state-completada';
+                actionsHTML = `
+                    <button type="button" class="btn-delete-mission" data-id="${mission.id}">
+                        🗑️ Eliminar
+                    </button>
+                `;
+            }
+
             return `
                 <div class="mission-card ${rarityInfo.rarityClass}" data-id="${mission.id}">
                     <div class="mission-card-header">
                         <div class="mission-card-title-group">
+                            <span class="state-badge ${estadoClass}">${estadoLabel}</span>
                             <span class="mission-card-icon" title="${categoryLabel}">${categoryIcon}</span>
                             <h3 class="mission-card-name">${escapeHTML(mission.name)}</h3>
                         </div>
@@ -562,9 +608,7 @@ const UI = {
                     <div class="mission-card-footer">
                         <span class="mission-card-meta">⏱️ ${cooldownText}</span>
                         <div class="mission-card-actions">
-                            <button type="button" class="btn-complete-mission" data-id="${mission.id}">
-                                ⚔️ Completar
-                            </button>
+                            ${actionsHTML}
                             <div class="mission-card-reward">
                                 <span class="exp-icon">💎</span>
                                 <span class="exp-value">+${mission.exp} XP</span>
@@ -630,6 +674,64 @@ const UI = {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closeLightbox();
         });
+    },
+
+    /**
+     * Opens the delete confirmation modal.
+     * @param {Function} onConfirm - Callback when clicking confirm.
+     */
+    openDeleteModal(onConfirm) {
+        const modal = this.elements.deleteModal;
+        if (!modal) return;
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+
+        // Setup handlers
+        const handleConfirm = () => {
+            if (typeof onConfirm === 'function') onConfirm();
+            this.closeDeleteModal();
+        };
+
+        const handleCancel = () => {
+            this.closeDeleteModal();
+        };
+
+        // Bind events cleanly by replacing buttons to clear old listeners
+        const confirmBtn = this.elements.confirmDeleteBtn;
+        if (confirmBtn) {
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            this.elements.confirmDeleteBtn = newConfirmBtn;
+            newConfirmBtn.addEventListener('click', handleConfirm);
+        }
+
+        const cancelBtn = this.elements.cancelDeleteBtn;
+        if (cancelBtn) {
+            const newCancelBtn = cancelBtn.cloneNode(true);
+            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+            this.elements.cancelDeleteBtn = newCancelBtn;
+            newCancelBtn.addEventListener('click', handleCancel);
+        }
+
+        const closeBtn = this.elements.deleteCloseBtn;
+        if (closeBtn) {
+            closeBtn.onclick = handleCancel;
+        }
+
+        modal.onclick = (e) => {
+            if (e.target === modal) handleCancel();
+        };
+    },
+
+    /**
+     * Closes the delete confirmation modal.
+     */
+    closeDeleteModal() {
+        const modal = this.elements.deleteModal;
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
     }
 };
 
