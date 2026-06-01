@@ -507,19 +507,17 @@ const UI = {
         });
     },
 
-    /**
-     * Renders the custom missions list in the container.
-     * @param {Array} missions - The array of mission objects to render.
-     */
-    renderMissionsList(missions) {
+    renderMissionsList(missions, emptyTitle, emptyDesc) {
         if (!this.elements.missionsListContainer) return;
 
         if (missions.length === 0) {
+            const title = emptyTitle || 'Aún no tienes misiones customizadas';
+            const desc = emptyDesc || 'Crea tu primera misión para empezar a ganar experiencia y vencer a la procrastinación.';
             this.elements.missionsListContainer.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-icon">🛡️</div>
-                    <p class="empty-title">Aún no tienes misiones customizadas</p>
-                    <p class="empty-desc">Crea tu primera misión para empezar a ganar experiencia y vencer a la procrastinación.</p>
+                    <p class="empty-title">${title}</p>
+                    <p class="empty-desc">${desc}</p>
                 </div>
             `;
             return;

@@ -146,6 +146,31 @@
             <!-- Right Column: Dashboard Active Missions List -->
             <section class="missions-board">
                 <h2 class="section-title">⚔️ Misiones del Gremio</h2>
+
+                <!-- Filtros combinados de Estado y Categoría -->
+                <div class="missions-filters" id="missions-filters">
+                    <div class="filter-group">
+                        <label for="mission-filter-status" class="filter-label">Estado</label>
+                        <select id="mission-filter-status" class="input-field select-field">
+                            <option value="all" selected>Todos</option>
+                            <option value="active">Activas</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="completed">Completadas</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="mission-filter-category" class="filter-label">Categoría</label>
+                        <select id="mission-filter-category" class="input-field select-field">
+                            <option value="all" selected>Todas</option>
+                            <option value="estudio">📚 Estudio</option>
+                            <option value="trabajo">💻 Trabajo</option>
+                            <option value="limpieza">🧹 Limpieza</option>
+                            <option value="bienestar">🧘 Bienestar</option>
+                            <option value="creatividad">🎨 Creatividad</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div id="missions-list" class="missions-list-container">
                     <!-- Dynamic mission list will be rendered here -->
                     <div class="empty-state">
@@ -168,10 +193,6 @@
         <a href="missions.html" class="nav-item active" id="nav-missions">
             <span class="nav-icon">⚔️</span>
             <span>Misiones</span>
-        </a>
-        <a href="profile.html" class="nav-item" id="nav-profile">
-            <span class="nav-icon">👤</span>
-            <span>Perfil</span>
         </a>
     </nav>
 
