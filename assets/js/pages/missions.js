@@ -203,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cooldown: formState.cooldown,
                 rarity: rarityInfo.text,
                 exp: calculatedExp,
+                estado: 'activa',
                 status: 'active'
             };
 
@@ -241,55 +242,102 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4.5 Bind click listener to missions list for mission completion (HU-05)
+    // 4.5 Bind click listener to missions list for mission completion, reactivation, and deletion
     const missionsListContainer = elements.missionsListContainer;
     if (missionsListContainer) {
         missionsListContainer.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-complete-mission');
-            if (!btn) return;
+            const completeBtn = e.target.closest('.btn-complete-mission');
+            const reactivateBtn = e.target.closest('.btn-reactivate-mission');
+            const deleteBtn = e.target.closest('.btn-delete-mission');
 
-            e.stopPropagation();
-            const missionId = btn.dataset.id;
-            
-            if (window.Storage && window.Progression && window.UI) {
-                const user = window.Storage.getUser();
-                const missions = window.Storage.getMissions();
-                const mission = missions.find(m => m.id === missionId);
+            if (completeBtn) {
+                e.stopPropagation();
+                const missionId = completeBtn.dataset.id;
+                
+                if (window.Storage && window.Progression && window.UI) {
+                    const user = window.Storage.getUser();
+                    const missions = window.Storage.getMissions();
+                    const mission = missions.find(m => m.id === missionId);
 
-                if (!user || !mission) return;
+                    if (!user || !mission) return;
 
-                // 1. Calculate and apply class bonus EXP
-                const baseExp = mission.exp || 0;
-                const finalExp = window.Progression.applyClassBonus(baseExp, user.class);
+                    // 1. Calculate and apply class bonus EXP
+                    const baseExp = mission.exp || 0;
+                    const finalExp = window.Progression.applyClassBonus(baseExp, user.class);
 
-                // 2. Perform the experience addition and level up check
-                const result = window.Progression.addExperience(finalExp);
+                    // 2. Perform the experience addition and level up check
+                    const result = window.Progression.addExperience(finalExp);
 
-                // 3. Remove the completed mission from active missions list
-                const updatedMissions = missions.filter(m => m.id !== missionId);
-                window.Storage.saveMissions(updatedMissions);
+                    // 3. Mark the mission as completed (completada)
+                    mission.estado = 'completada';
+                    mission.status = 'completed';
+                    window.Storage.saveMissions(missions);
 
-                // 3.5. Trigger the bar update immediately after saving the user object to localStorage (HU-05)
-                const updatedUser = window.Storage.getUser();
-                if (typeof window.renderExpBar === 'function') {
-                    window.renderExpBar(updatedUser);
-                }
-
-                // 4. Show success toast notifications sequentially (HU-05)
-                window.UI.showToast(`¡Misión completada! Has ganado +${finalExp} EXP.`).then(() => {
-                    if (result && result.leveledUp) {
-                        window.UI.showToast(`🎉 ¡SUBISTE DE NIVEL! Ahora eres Nivel ${result.newLevel} (${result.newTitle})`);
+                    // 3.5. Trigger the bar update immediately after saving the user object to localStorage (HU-05)
+                    const updatedUser = window.Storage.getUser();
+                    if (typeof window.renderExpBar === 'function') {
+                        window.renderExpBar(updatedUser);
                     }
-                });
 
-                // 5. Instantly sync the list view
-                syncMissionsList();
+                    // 4. Show success toast notifications sequentially (HU-05)
+                    window.UI.showToast(`¡Misión completada! Has ganado +${finalExp} EXP.`).then(() => {
+                        if (result && result.leveledUp) {
+                            window.UI.showToast(`🎉 ¡SUBISTE DE NIVEL! Ahora eres Nivel ${result.newLevel} (${result.newTitle})`);
+                        }
+                    });
+
+                    // 5. Instantly sync the list view
+                    syncMissionsList();
+                }
+            }
+
+            if (reactivateBtn) {
+                e.stopPropagation();
+                const missionId = reactivateBtn.dataset.id;
+
+                if (window.Storage && window.UI) {
+                    const missions = window.Storage.getMissions();
+                    const mission = missions.find(m => m.id === missionId);
+
+                    if (!mission) return;
+
+                    // Reactivate the mission
+                    mission.estado = 'activa';
+                    mission.status = 'active';
+                    window.Storage.saveMissions(missions);
+
+                    // Show visual feedback toast
+                    window.UI.showToast(`¡Misión "${mission.name}" reactivada con éxito!`);
+
+                    // Instantly sync list view
+                    syncMissionsList();
+                }
+            }
+
+            if (deleteBtn) {
+                e.stopPropagation();
+                const missionId = deleteBtn.dataset.id;
+
+                if (window.Storage && window.UI) {
+                    const missions = window.Storage.getMissions();
+                    const mission = missions.find(m => m.id === missionId);
+
+                    if (!mission) return;
+
+                    // Open delete confirmation modal
+                    window.UI.openDeleteModal(() => {
+                        const updatedMissions = missions.filter(m => m.id !== missionId);
+                        window.Storage.saveMissions(updatedMissions);
+                        window.UI.showToast(`Misión "${mission.name}" eliminada.`);
+                        syncMissionsList();
+                    });
+                }
             }
         });
     }
 
     /**
-     * Filters the missions by category and chains with the state filter, then renders.
+     * Filters the missions by state first, then category, and renders.
      * @param {string} category - 'all' | category code
      */
     function filterByCategory(category) {
@@ -299,20 +347,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusEl = document.getElementById('mission-filter-status');
         const status = statusEl ? statusEl.value : 'all';
 
-        // 1. Apply category filter
+        // 1. First filter by state (activa, inactiva, completada, all)
         let filtered = missions;
+        if (status && status !== 'all') {
+            filtered = filtered.filter(m => {
+                const s = (m.estado || m.status || 'activa').toLowerCase().trim();
+                if (status === 'activa') {
+                    return s === 'activa' || s === 'active';
+                } else if (status === 'inactiva') {
+                    return s === 'inactiva' || s === 'inactive' || s === 'vencida';
+                } else if (status === 'completada') {
+                    return s === 'completada' || s === 'completed';
+                }
+                return false;
+            });
+        }
+
+        // 2. Then filter by category
         if (category && category !== 'all') {
             filtered = filtered.filter(m => {
                 const cat = (m.category || m.categoria || '').toLowerCase().trim();
                 return cat === category.toLowerCase().trim();
-            });
-        }
-
-        // 2. Chain and apply status filter
-        if (status && status !== 'all') {
-            filtered = filtered.filter(m => {
-                const s = m.status || 'active';
-                return s === status;
             });
         }
 

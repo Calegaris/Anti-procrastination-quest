@@ -153,9 +153,9 @@
                         <label for="mission-filter-status" class="filter-label">Estado</label>
                         <select id="mission-filter-status" class="input-field select-field">
                             <option value="all" selected>Todos</option>
-                            <option value="active">Activas</option>
-                            <option value="pending">Pendientes</option>
-                            <option value="completed">Completadas</option>
+                            <option value="activa">Activas</option>
+                            <option value="inactiva">Inactivas</option>
+                            <option value="completada">Completadas</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -195,6 +195,27 @@
             <span>Misiones</span>
         </a>
     </nav>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div id="delete-confirm-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-delete-title">
+        <div class="modal-card delete-card">
+            <button type="button" class="modal-close-btn" id="modal-delete-close-btn" aria-label="Cerrar">&times;</button>
+            
+            <header class="modal-header">
+                <span class="modal-class-icon">⚠️</span>
+                <h2 class="modal-class-title" id="modal-delete-title">Confirmar Acción</h2>
+            </header>
+            
+            <div class="modal-body text-center">
+                <p class="delete-warning-text">¿Estás seguro de que querés eliminar esta misión?</p>
+            </div>
+            
+            <footer class="modal-footer delete-footer">
+                <button type="button" class="btn-cancel-delete" id="btn-cancel-delete">CANCELAR</button>
+                <button type="button" class="btn-confirm-delete" id="btn-confirm-delete">CONFIRMAR</button>
+            </footer>
+        </div>
+    </div>
 
     <!-- Scripts defer loading -->
     <script src="../assets/js/storage.js" defer></script>

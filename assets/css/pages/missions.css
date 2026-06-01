@@ -859,3 +859,257 @@ select.input-field option {
         gap: var(--spacing-sm);
     }
 }
+
+/* ============================================================
+   STATE BADGES STYLING
+   ============================================================ */
+
+.state-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    margin-right: var(--spacing-xs);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.state-badge.state-activa {
+    color: var(--rarity-uncommon);
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.state-badge.state-inactiva {
+    color: var(--color-text-muted);
+    background: rgba(148, 163, 184, 0.08);
+}
+
+.state-badge.state-completada {
+    color: var(--color-accent-magic);
+    background: rgba(59, 130, 246, 0.08);
+}
+
+/* Delete Button on Mission Card */
+.btn-delete-mission {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-delete-mission:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+}
+
+.btn-delete-mission:active {
+    transform: translateY(1px);
+}
+
+/* Reactivate Button on Mission Card */
+.btn-reactivate-mission {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-reactivate-mission:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.btn-reactivate-mission:active {
+    transform: translateY(1px);
+}
+
+/* ============================================================
+   DELETE CONFIRMATION MODAL REDESIGN
+   ============================================================ */
+
+.modal-card.delete-card {
+    border: 2px solid #ef4444;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
+    background: rgba(34, 38, 48, 0.98);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 440px; /* narrowed for visually balanced delete box */
+    padding: var(--spacing-lg) var(--spacing-lg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+    justify-content: center;
+}
+
+/* Close Icon repositioned to the top-right corner */
+.modal-card.delete-card .modal-close-btn {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.85rem;
+    font-weight: 400;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.modal-card.delete-card .modal-close-btn:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+.modal-card.delete-card .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centered title and warning */
+    gap: var(--spacing-sm);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    width: 100%;
+}
+
+.modal-card.delete-card .modal-class-icon {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.modal-card.delete-card .modal-class-title {
+    font-family: var(--font-pixel);
+    font-size: 0.95rem;
+    color: #ef4444; /* danger red */
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+    margin: 0;
+}
+
+.modal-card.delete-card .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-sm) 0;
+}
+
+.modal-card.delete-card .delete-warning-text {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-main);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.modal-card.delete-card .modal-footer.delete-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* center horizontally */
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    width: 100%;
+}
+
+.modal-card.delete-card .btn-cancel-delete {
+    flex: 1;
+    background: rgba(71, 85, 105, 0.2);
+    border: 1px solid var(--color-text-muted);
+    border-radius: 8px;
+    color: var(--color-text-muted);
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 12px var(--spacing-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-card.delete-card .btn-cancel-delete:hover {
+    color: var(--color-text-main);
+    border-color: var(--color-text-main);
+    background: rgba(71, 85, 105, 0.35);
+}
+
+.modal-card.delete-card .btn-confirm-delete {
+    flex: 1;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 12px var(--spacing-md);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+    transition: all 0.2s ease;
+    text-align: center;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-card.delete-card .btn-confirm-delete:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.45);
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+}
+
+.modal-card.delete-card .btn-confirm-delete:active {
+    transform: translateY(1px);
+}
+
+/* Modal Overlay overrides for pages/missions.html */
+.modal-overlay {
+    display: none !important;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 11, 15, 0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
